@@ -1,7 +1,7 @@
 {
   "name": "arweave-uploader",
   "version": "1.0.0",
-  "description": "A Simple script to upload data to the Arweave blockchain from a data source",
+  "description": "A Simple script to upload json data to the Arweave blockchain from a CSV",
   "main": "uploader.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
