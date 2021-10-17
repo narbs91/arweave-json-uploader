@@ -1,12 +1,11 @@
 import Arweave from 'arweave';
-import { tag } from '../types/arweave-types';
+import TestWeave from 'testweave-sdk';
+import { tag } from '../src/types/arweave-types';
 import winston from "winston";
-import { VIEWBLOCK_ADDRESS } from '../utils/arweaveUploaderContsants';
-import { JWKInterface } from 'arweave/node/lib/wallet';
+import { TESTWEAVE_ENDPOINT } from '../src/utils/arweaveUploaderContsants';
 
-// The script assumes these values are part of your environment variables
-const ARWEAVE_ADDRESS = process.env.ARWEAVE_TEST_ADDRESS;
-const ARWEAVE_KEY = JSON.parse(process.env.ARWEAVE_TEST_KEY as string) as JWKInterface;
+
+const ARWEAVE_ADDRESS = "MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y";
 
 const LOGGER = winston.createLogger({
     transports: [
@@ -15,30 +14,32 @@ const LOGGER = winston.createLogger({
     ]
 });
 
-// Required configuration according to issue: https://github.com/ArweaveTeam/arweave-js/issues/103
 const arweave = Arweave.init({
-    host: 'arweave.net',
-    protocol: 'https',
-    port: 443
+    host: 'localhost',
+    port: 1984,
+    protocol: 'http',
+    timeout: 20000,
+    logging: false,
 });
+const testInstance = TestWeave.init(arweave as any);
 
-export const upload = async (_data: string, _tags: tag[]) => {
+export const uploadToTestWeave = async (_data: string, _tags: tag[]) => {
     let transaction = await arweave.createTransaction({
         data: _data
-    }, ARWEAVE_KEY)
+    }, (await testInstance).rootJWK)
 
     _tags.forEach(tag => {
         transaction.addTag(tag.key, tag.value)
     });
 
     LOGGER.info("-------Transaction-------");
-    LOGGER.info(`[Transaction log] transactionId=${transaction.id}, transaction=${JSON.stringify(transaction)}`);
+    LOGGER.info(transaction)
 
-    await arweave.transactions.sign(transaction, ARWEAVE_KEY)
+    await arweave.transactions.sign(transaction, (await testInstance).rootJWK)
         .then(async () => {
             let uploader = await arweave.transactions.getUploader(transaction);
 
-            LOGGER.info("-------Beginning to upload data to the weave-------");
+            LOGGER.info("-------Beginning to upload data to the test weave-------");
 
             while (!uploader.isComplete) {
                 try {
@@ -46,11 +47,22 @@ export const upload = async (_data: string, _tags: tag[]) => {
 
                     LOGGER.info(`[Upload Progress] transactionId=${transaction.id}, ${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`);
                 } catch (e) {
-                    LOGGER.error(`[Error occurred uploading data], transactionId=${transaction.id}, error=${e}`);
+                    LOGGER.error(`[Error occurred uploading data], error=${e}`);
 
                     throw "Error occurred uploading data";
                 }
             }
+        }).then(async () => {
+            // Mine the transaction
+            await (await testInstance).mine()
+                .then(() => {
+                    return transaction.id;
+                })
+                .catch((err) => {
+                    LOGGER.error(`[Error occurred while attempting to mine] error=${err}`);
+
+                    throw "Error occurred while mining transaction"
+                })
         })
 
     return transaction.id;
@@ -78,10 +90,10 @@ export const getDataForTransaction = async (transactionId: string) => {
     })
 }
 
-export const logStatusForTransaction = async (transactionId: string) => {
+export const logStatusForTransactionFromTestWeave = async (transactionId: string) => {
     // Read the transaction status
     arweave.transactions.getStatus(transactionId).then((res) => {
-        LOGGER.info(`[Transaction status] transactionId=${transactionId}, status=${res.status}, confirmations=${res.confirmed?.number_of_confirmations}, explorerLink=${VIEWBLOCK_ADDRESS}/${transactionId}`);
+        LOGGER.info(`[Transaction status] transactionId=${transactionId}, status=${res.status}, confirmations=${res.confirmed?.number_of_confirmations}, linkToData=${TESTWEAVE_ENDPOINT}/${transactionId}`);
     }).catch((err) => {
         LOGGER.error(`[Error occurred while retrieving status] transactionId=${transactionId}, e=${err}`);
     })
