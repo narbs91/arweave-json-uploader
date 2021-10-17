@@ -5,8 +5,8 @@ import { VIEWBLOCK_ADDRESS } from '../utils/arweaveUploaderContsants';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 
 // The script assumes these values are part of your environment variables
-const ARWEAVE_ADDRESS = process.env.ARWEAVE_TEST_ADDRESS;
-const ARWEAVE_KEY = JSON.parse(process.env.ARWEAVE_TEST_KEY as string) as JWKInterface;
+const ARWEAVE_ADDRESS = process.env.ARWEAVE_ADDRESS;
+const ARWEAVE_KEY = JSON.parse(process.env.ARWEAVE_KEY as string) as JWKInterface;
 
 const LOGGER = winston.createLogger({
     transports: [
