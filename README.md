@@ -36,7 +36,7 @@ For more information about setting up environment variables you can check out th
 
 ### How to build
 
-0. Run `nvm` in the project root directory
+0. Run `nvm install` in the project root directory
 1. Run `yarn` to pull in the dependencies
 
 ### Content source
@@ -103,3 +103,7 @@ query {
 ```
 
 Please view the [graphQL documentation](https://gql-guide.vercel.app/) or the [http api docs](https://docs.arweave.org/developers/server/http-api) for more examples on how/what your can query.
+
+## See Issues or have a feature in mind?
+
+If you see any bugs during use or have a cool feature request, please don't hesistate to create an [issue](https://github.com/narbs91/arweave-json-uploader/issues) :)
