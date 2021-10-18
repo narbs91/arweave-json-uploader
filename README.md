@@ -107,3 +107,7 @@ Please view the [graphQL documentation](https://gql-guide.vercel.app/) or the [h
 ## See Issues or have a feature in mind?
 
 If you see any bugs during use or have a cool feature request, please don't hesistate to create an [issue](https://github.com/narbs91/arweave-json-uploader/issues) :)
+
+## Found the script helpful?
+
+If you found the script helpful to you and would like me to continue building/support the project consider a small (totally optional) ETH donation to the following Ethereum address: `0x35Bd29AF1DeD41Aacd561bc1E4eEf1E1EA852D77`
