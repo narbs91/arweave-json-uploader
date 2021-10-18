@@ -30,7 +30,7 @@ The script assumes you have the following environment variables defined in your 
 6. Press the `esc` key on your keyboard to exit editing mode, type `:x` and press enter to save the file and close VIM at the same time.
 7. Close your terminal window and open another one so that your changes can be reflected.  Type `echo $ARWEAVE_ADDRESS && echo $ARWEAVE_KEY` and press enter.  If you did things correctly you should see you Arweave public address and key printed on screen.
 
-*Note*: With the above complete you will have store you public and private keys locally on your machine.  As always never disclose your private key to anyone so that you can keep your funds safe.
+*Note*: With the above complete you will have stored you public and private keys locally on your machine.  As always never disclose your private key to anyone so that you can keep your funds safe.
 
 For more information about setting up environment variables you can check out this [blog post](https://www.twilio.com/blog/2017/01/how-to-set-environment-variables.html)
 
@@ -66,8 +66,8 @@ The script runs entirely through the command line and can be run with the follow
 5. **(Optional but recommend)** In the `testweave-docker` project root run `docker-compose up` to start up the testweave node.
 6. **(Optional but recommend)** Go back to the original terminal window you opened with the `arweave-uploader` project root and run `ts-node uploader.ts -d false -t true` to begin an actual upload to your local testweave.  If you notice your testweave docker container hanging on operations i've found that deleting the container and starting it again with `docker-compose up` resolves the issue.
 7. **(Optional but recommend)** Once the upload is finished, observe the `logs/service.log` file to see the results
-9. Assuming you are satisfied with your dryrun and/or testweave uploads you can now upload to the Arweave mainnet via `ts-node uploader.ts -d false -t false` (**Warning:** This step will actually consume AR tokens from your wallet)
-10. Once the upload is finished, observe the `logs/service.log` file to see the results
+8. Assuming you are satisfied with your dryrun and/or testweave uploads you can now upload to the Arweave mainnet via `ts-node uploader.ts -d false -t false` (**Warning:** This step will actually consume AR tokens from your wallet)
+9. Once the upload is finished, observe the `logs/service.log` file to see the results
 
 **Checking upload results**
 
