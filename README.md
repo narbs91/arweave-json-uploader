@@ -60,13 +60,13 @@ The script runs entirely through the command line and can be run with the follow
 
 0. Open up a terminal and traverse to the project root i.e. `cd some/path/to/arweave-uploader`
 1. Replace the content of `resources/sample.csv` with the data of your liking, making sure to keep `Content-Type` in the header and `application/json` as the first value in each row.
-2. Run `ts-node -d true` to run the script in `dryrun` mode to observe how your requests will look like without actually uploading.
+2. Run `ts-node uploader.ts -d true` to run the script in `dryrun` mode to observe how your requests will look like without actually uploading.
 3. Observe the `logs/service.log` file to see if your data looks like you expect it to
 4. **(Optional but recommend)** Open a separate terminal and traverse to where the `testweave-docker` repo is located i.e. `cd some/path/to/testweave-docker`.
 5. **(Optional but recommend)** In the `testweave-docker` project root run `docker-compose up` to start up the testweave node.
-6. **(Optional but recommend)** Go back to the original terminal window you opened with the `arweave-uploader` project root and run `ts-node -d false -t true` to begin an actual upload to your local testweave.
+6. **(Optional but recommend)** Go back to the original terminal window you opened with the `arweave-uploader` project root and run `ts-node uploader.ts -d false -t true` to begin an actual upload to your local testweave.
 7. **(Optional but recommend)** Once the upload is finished, observe the `logs/service.log` file to see the results
-8. Assuming you are satisfied with your dryrun and/or testweave uploads you can now upload to the Arweave mainnet via `ts-node -d false -t false` (**Warning:** This step will actually consume AR tokens from your wallet)
+8. Assuming you are satisfied with your dryrun and/or testweave uploads you can now upload to the Arweave mainnet via `ts-node uploader.ts -d false -t false` (**Warning:** This step will actually consume AR tokens from your wallet)
 9. Once the upload is finished, observe the `logs/service.log` file to see the results
 
 **Checking upload results**
