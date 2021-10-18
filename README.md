@@ -1,4 +1,4 @@
-# Arweave-uploader
+# Arweave-json-uploader
 
 A simple node.js script to upload json data to the [Arweave Blockchain](https://www.arweave.org/) via CSV.  The script comes as is and the author is not liable for lost AR tokens due to misuse.
 
