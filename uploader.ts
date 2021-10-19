@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { upload, logStatusForTransaction } from "./src/client/arweave-client";
+import { upload, logStatusForTransaction, getWalletBalance } from "./src/client/arweave-client";
 import { uploadToTestWeave, logStatusForTransactionFromTestWeave } from "./test/testweave-client";
 import { tag, uploadRequest } from "./src/types/arweave-types";
 import { parseStream } from "fast-csv"
@@ -48,6 +48,14 @@ const uploadData = async (requests: uploadRequest[]) => {
     for (let i = 0; i < requests.length; i++) {
 
       if (testweave === "false") {
+
+        const userBalance = await getWalletBalance();
+
+        if (parseFloat(userBalance) === 0) {
+          LOGGER.error(`[Insufficient funds in balance.  Upload process halted] balance=${parseFloat(userBalance)}, haltedRequest=${JSON.stringify(requests[i])}`)
+          break;
+        }
+
         await upload(requests[i].data, requests[i].tags)
           .then((transactionId) => {
             transactionIds.push(transactionId);
@@ -55,6 +63,7 @@ const uploadData = async (requests: uploadRequest[]) => {
           .catch((err) => {
             LOGGER.error(`[Upload to weave failed]  error=${err}, request=${JSON.stringify(requests[i])}`);
           })
+
       } else {
         await uploadToTestWeave(requests[i].data, requests[i].tags)
           .then(async (transactionId) => {
