@@ -68,13 +68,13 @@ export const uploadToTestWeave = async (_data: string, _tags: tag[]) => {
     return transaction.id;
 }
 
-export const getWalletBalance = async () => {
+export const getTestWalletBalance = async () => {
     LOGGER.info(`[Retrieving Arweave wallet balance] address=${ARWEAVE_ADDRESS}`);
 
     const balance = await arweave.wallets.getBalance(ARWEAVE_ADDRESS as string);
     let ar = arweave.ar.winstonToAr(balance);
 
-    LOGGER.info(`[Arweave wallet balance retrieved] balance=${ar}`);
+    LOGGER.info(`[Testweave wallet balance retrieved] balance=${parseFloat(ar)}`);
 
     return ar;
 }

@@ -62,7 +62,7 @@ export const getWalletBalance = async () => {
     const balance = await arweave.wallets.getBalance(ARWEAVE_ADDRESS as string);
     let ar = arweave.ar.winstonToAr(balance);
 
-    LOGGER.info(`[Arweave wallet balance retrieved] balance=${ar}`);
+    LOGGER.info(`[Arweave wallet balance retrieved] balance=${parseFloat(ar)}`);
 
     return ar;
 }
