@@ -1,6 +1,6 @@
 {
   "name": "arweave-uploader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Simple script to upload json data to the Arweave blockchain from a CSV",
   "main": "uploader.ts",
   "scripts": {
