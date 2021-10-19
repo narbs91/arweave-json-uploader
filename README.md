@@ -11,13 +11,13 @@ A simple node.js script to upload json data to the [Arweave Blockchain](https://
 
 ### Recommended Prerequisite
 
-The arweave-uploader supports running against a locally running testweave for testing purposes.  It is **highly recommended** you have run your upload against the testweave before committing to writing against the Arweave mainnet as writes are permanent and cost actual AR token.  Follow the instructions in the official ArweaveTeam [teastweave-docker repo](https://github.com/ArweaveTeam/testweave-docker) to get yourself up and running with a local testweave docker container.  Instructions on how to install docker on your system is provided in the guide above.  
+The arweave-json-uploader supports running against a locally running testweave for testing purposes.  It is **highly recommended** you have run your upload against the testweave before committing to writing against the Arweave mainnet as writes are permanent and cost actual AR token.  Follow the instructions in the official ArweaveTeam [teastweave-docker repo](https://github.com/ArweaveTeam/testweave-docker) to get yourself up and running with a local testweave docker container.  Instructions on how to install docker on your system is provided in the guide above.  
 
-*Note:* You do not have to worry about the [TestWeave SDK](https://github.com/ArweaveTeam/testweave-sdk) as the arweave-uploader script already has it integrated.
+*Note:* You do not have to worry about the [TestWeave SDK](https://github.com/ArweaveTeam/testweave-sdk) as the uploader script already has it integrated.
 
 ## Usage
 
-### Setting your env variables
+### Setting your environment variables
 
 The script assumes you have the following environment variables defined in your system: `ARWEAVE_ADDRESS` and `ARWEAVE_KEY`.  To set these variables in your system (assuming a MacOS or Linux OS), do the following:
 
@@ -41,7 +41,7 @@ For more information about setting up environment variables you can check out th
 
 ### Content source
 
-The script uses the `resources/sample.csv` as the source of content when preforming an upload.  A given row represents the data (the actual contents of the JSON) portion of what will be uploaded to the weave and the headers represent the tags (key/value pairs as metadata) that will be set on that data (Please see the [developer api docs](https://docs.arweave.org/developers/server/http-api#field-definitions) for more information).  Please adjust this file as needed with the data you wish to upload; however, this script is only intended to upload JSON in it's current form so you have to leave the `Content-Type` header and `application/json` value in each row so that things work as expected.
+The script uses the `resources/sample.csv` as the source of content when preforming an upload.  A given row represents the data (the actual contents of the JSON) portion of what will be uploaded to the weave.  Each row also represents the metadata that wil be attached to the data via tags(key/value pairs) where the headers of the CSV represent the keys (Please see the [developer api docs](https://docs.arweave.org/developers/server/http-api#field-definitions) for more information).  Please adjust this file as needed with the data you wish to upload; however, this script is only intended to upload JSON in it's current form so you have to leave the `Content-Type` header and `application/json` value in each row so that things work as expected.  There may be future expansions to the script to allow more content types.
 
 You might be asking why the same data is being uploaded as the main content and as metadata at the same time.  The author took this approach due to the fact that the [Arweave graphQL api](https://gql-guide.vercel.app/) does not support querying for data specifically and wanted a way for data to be searchable/available through a single entry point.  
 
