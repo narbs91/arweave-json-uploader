@@ -25,7 +25,7 @@ const createUploadRequestFromRow = (row: any, headers: string[]) => {
 
   headers.forEach((key) => {
     const tag = {
-      key: key,
+      name: key,
       value: JSON.stringify(row[key]).replace(/"/g, '').trim()
     }
 

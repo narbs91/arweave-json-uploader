@@ -3,7 +3,8 @@ import TestWeave from 'testweave-sdk';
 import { tag } from '../src/types/arweave-types';
 import winston from "winston";
 import { TESTWEAVE_ENDPOINT } from '../src/utils/arweaveUploaderContsants';
-
+import { uploadRequest } from '../src/types/arweave-types';
+import { ArweaveSigner, bundleAndSignData, createData, Bundle } from "arbundles";
 
 const ARWEAVE_ADDRESS = "MlV6DeOtRmakDOf6vgOBlif795tcWimgyPsYYNQ8q1Y";
 
@@ -23,20 +24,64 @@ const arweave = Arweave.init({
 });
 const testInstance = TestWeave.init(arweave as any);
 
+
+export const uploadBulkToTestWeave = async (requests: uploadRequest[]) => {
+    const signer = new ArweaveSigner((await testInstance).rootJWK);
+
+    const _data = [];
+
+    for (let i = 0; i < requests.length; i++) {
+        _data.push(await createData(requests[i].data, signer, { tags: requests[i].tags }));
+    }
+
+    const bundle = await bundleAndSignData(_data, signer);
+
+    const tx = await bundle.toTransaction(arweave, (await testInstance).rootJWK);
+
+    LOGGER.info("-------TesWeave Transaction-------");
+
+    await arweave.transactions.sign(tx, (await testInstance).rootJWK);
+
+    LOGGER.info(`[Transaction log] transactionId=${tx.id}, transaction=${JSON.stringify(tx)}`);
+
+    try {
+        await arweave.transactions.post(tx).then(async () => {
+            // Mine the transaction
+            await (await testInstance).mine()
+                .then(() => {
+                    return tx.id;
+                })
+                .catch((err) => {
+                    LOGGER.error(`[Error occurred while attempting to mine] error=${err}`);
+
+                    throw "Error occurred while mining transaction"
+                })
+        })
+
+    } catch (e) {
+        LOGGER.error(`[Error occurred uploading data], transactionId=${tx.id}, error=${e}`);
+
+        throw "Error occurred uploading data through bundler";
+    }
+
+    return tx.id;
+}
+
 export const uploadToTestWeave = async (_data: string, _tags: tag[]) => {
     let transaction = await arweave.createTransaction({
         data: _data
     }, (await testInstance).rootJWK)
 
     _tags.forEach(tag => {
-        transaction.addTag(tag.key, tag.value)
+        transaction.addTag(tag.name, tag.value)
     });
 
-    LOGGER.info("-------Transaction-------");
-    LOGGER.info(transaction)
+    LOGGER.info("-------Testweave Transaction-------");
 
     await arweave.transactions.sign(transaction, (await testInstance).rootJWK)
         .then(async () => {
+            LOGGER.info(`[Transaction log] transactionId=${transaction.id}, transaction=${JSON.stringify(transaction)}`);
+            
             let uploader = await arweave.transactions.getUploader(transaction);
 
             LOGGER.info("-------Beginning to upload data to the test weave-------");
