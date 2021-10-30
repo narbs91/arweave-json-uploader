@@ -32,10 +32,11 @@ export const upload = async (_data: string, _tags: tag[]) => {
     });
 
     LOGGER.info("-------Transaction-------");
-    LOGGER.info(`[Transaction log] transactionId=${transaction.id}, transaction=${JSON.stringify(transaction)}`);
 
     await arweave.transactions.sign(transaction, ARWEAVE_KEY)
         .then(async () => {
+            LOGGER.info(`[Transaction log] transactionId=${transaction.id}, transaction=${JSON.stringify(transaction)}`);
+            
             let uploader = await arweave.transactions.getUploader(transaction);
 
             LOGGER.info("-------Beginning to upload data to the weave-------");
