@@ -12,7 +12,7 @@
     "@types/node": "^16.10.3",
     "arweave": "^1.10.17",
     "commander": "^8.2.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "fast-csv": "^4.3.6",
     "testweave-sdk": "^0.2.2",
     "ts-node": "10.3.0",
